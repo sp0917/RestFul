@@ -6,3 +6,10 @@ libevent methods comments:
 4.evhttp_request_get_output_buffer()
 
 注:上述1，2，3，4中的input/output是相对于当前的使用者而言；input表示对方发送过来的数据，output表示自己将要发送出去的数据。
+
+5.evhttp_request_get_uri();
+6.evhttp_request_get_evhttp_uri();
+
+注: 5.返回请求头中的url,不需要释放空间，但是不能修改该内容，否则会导致同时修改请求头中的url,
+      配合evhttp_uridecode()函数一起使用，返回申请的空间，需要手动释放空间。
+    6.返回的是evhttp_uri结构体，该结构体中包含uri，port，address等信息。
