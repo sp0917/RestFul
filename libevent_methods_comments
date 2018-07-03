@@ -1,0 +1,8 @@
+libevent methods comments:
+
+1.evhttp_request_get_input_headers()
+2.evhttp_request_get_output_headers()
+3.evhttp_request_get_input_buffer()
+4.evhttp_request_get_output_buffer()
+
+注:上述1，2，3，4中的input/output是相对于当前的使用者而言；input表示对方发送过来的数据，output表示自己将要发送出去的数据。
