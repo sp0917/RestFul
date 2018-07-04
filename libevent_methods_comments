@@ -13,3 +13,42 @@ libevent methods comments:
 注: 5.返回请求头中的url,不需要释放空间，但是不能修改该内容，否则会导致同时修改请求头中的url,
       配合evhttp_uridecode()函数一起使用，返回申请的空间，需要手动释放空间。
     6.返回的是evhttp_uri结构体，该结构体中包含uri，port，address等信息。
+
+jsonToEvbuffer:
+std::string str_val;
+Json::FastWriter jsWriter(str_val);
+
+if(!jsWriter.write(res)){
+      sendErrMsg(req, buf, httpImplemented);
+      return false;
+}
+
+evbuffer_add(buf, (void *)str_val.c_str(), (size_t)str_val.length());
+return true;
+
+evbufferToJson:
+struct evbuffer* buf = evhttp_request_get_input(req);
+size_t len = evbuffer_get_lenth(buf);
+char* req_buf = NULL;
+
+char *translated = evhttp_uridecode(evhttp_request_get_uri(req), 0, NULL);
+setUrl(translated);
+free(translated);
+char tmp[40] = {0};
+char *address = tmp;
+unsigned int port = 0;
+evhttp_connection_get_peer(evhttp_request_get_connection(req), &address, &port);
+
+req_buf = (char *)malloc(len);
+evbuffer_copyout(buf, req_buf, len);
+setContemt(req_buf, len);
+
+m_content.clear();
+if (!len)
+      return true;
+Json::Reader jsReader;
+if (!jsReader.parse(content, content + len, m_content, true))
+{
+      return false;
+}
+return true;
