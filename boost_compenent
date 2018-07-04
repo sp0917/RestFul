@@ -23,3 +23,10 @@ int formatFunc(const char* format, va_list alist, std::string& msg)
   
   return contentLen;
 }
+
+boost_log
+boost_log_setup
+boost_date_time
+boost_filesystem
+boost_system
+boost_thread
