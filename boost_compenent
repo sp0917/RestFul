@@ -1,0 +1,25 @@
+1.Log:
+
+#define LOG_CLASSNAME(a)  static const char* s_log_class_name = #a
+#define LOG_ERROR(format, ...) \
+  writeLog(slg, error, "#%s::%s %d"format, s_log_class_name, __FUNCTION__, __LINE__, ##__VA_ARGS__)
+  
+void writeLog(severity_level level, const char* format)
+{
+  std::string msg;
+  va_list alist;
+  va_start(alist, format);
+  formatFunc(format, alist, msg);
+  va_end(alist);
+  
+  BOOST_LOG_SEV(slg, level) << msg;
+}
+
+int formatFunc(const char* format, va_list alist, std::string& msg)
+{
+  char buf[BUF_LEN] = {0};
+  int contentLen = vsnprintf(buf, BUF_LEN - 1, format, alist);
+  msg = buf;
+  
+  return contentLen;
+}
